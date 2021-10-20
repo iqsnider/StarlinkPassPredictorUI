@@ -13,7 +13,7 @@
 # interface for planning Starlink satellite observations.
 # This is intended for students and amateur astronomers.
 
-# @author modifications: Ian Snider Hi how are you?
+# @author modifications: Ian Snider
 # Truman State University
 
 # This program is free software: you can redistribute it and/or modify
