@@ -1,5 +1,5 @@
 # main.py
-# 
+
 # This script utilizes the functions in the other files to calculate
 # ephemerides for Starlink, determine which are visible, and create
 # an ACP observing plan for the Pomenis telescope
@@ -9,6 +9,13 @@
 # University of Arizona
 # Copyright May 2020
 #
+# This original script has been modified for developing a user-friendly
+# interface for planning Starlink satellite observations.
+# This is intended for students and amateur astronomers.
+
+# @author modifications: Ian Snider
+# Truman State University
+
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
