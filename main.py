@@ -155,6 +155,7 @@ passes = starlinkPassPredictor(twilight, stop, loc, params, path, "allPassesEven
 #Select some to observe
 passes = selectStarlinkPasses(passes, timePer, path, "selectedPassesEvening_" + start.strftime('%Y-%m-%d'))
 
+
 #Make an ACP plan
 filename = "starlinkPlanEvening.txt"
 print("Writing ACP Plan as " + filename)
@@ -198,13 +199,13 @@ def displayPlan(planBox):
     return lambda : callback(planBox)
 
 def callback(planBox):
-    s = "Hello"
+    s = passes[0]
     planBox.insert(END, s)
     planBox.see(END)    
     
     
 # Plan button widget
-btn = Button(root, text = "Plan", fg = "purple", command  = displayPlan(planBox))
+btn = Button(root, text = "Plan", fg = "purple", command=displayPlan(planBox))
 btn.place(x=280,y=0)
 
 #Find .txt file for GUI
