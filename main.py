@@ -65,14 +65,6 @@ item.add_command(label = 'New')
 menu.add_cascade(label = 'File', menu = item)
 root.config(menu = menu)
 
-#plan header
-planX = Label(root, text = "STARLINK-2192            47769C   2021-10-20 00:23:57   313.709        2021-10-20 00:30:01   27.9096    26.4055        2021-10-20 00:36:04   99.0810       0:12:07")
-planX.place(x=5,y=65)
-
-#textbox output for copy/pasting
-planBox = ScrolledText(root, width=120, font=("lucida", 13))
-planBox.place(x=5,y=85)
-
 
 #end of style GUI Block
 
@@ -181,6 +173,15 @@ writeAcpPlan(obs, exposureTime, exposureRepeat, filterLetter, binning, imagePath
 
 #PassPredictor plan GUI output 
 
+#plan header
+planX = Label(root, text = "Name                     ID       Rise Time             Rise Azimuth   Peak Time             Peak Alt   Peak Azimuth   Set Time              Set Azimuth   Duration")
+planX.place(x=5,y=65)
+
+#textbox output for copy/pasting
+planBox = ScrolledText(root, width=120, font=("lucida", 13))
+planBox.place(x=5,y=85)
+
+
 # adding a label to the root window
 lbl = Label(root, text = "Location (e.g. \"TSU farm\")")
 lbl.place(x=5,y=0)
@@ -191,15 +192,19 @@ txt = Entry(root, width=10)
 txt.place(x=175,y=0)
 
 
-#function to display user text when button is clicked
-def clicked():
-    
-    res = "Location (e.g. \"TSU farm\")"
-    lbl.configure(text = res)
+#functions to display user text when button is clicked
+#currently it prints "Hello" when display is called
+def displayPlan(planBox):
+    return lambda : callback(planBox)
+
+def callback(planBox):
+    s = "Hello"
+    planBox.insert(END, s)
+    planBox.see(END)    
     
     
 # Plan button widget
-btn = Button(root, text = "Plan", fg = "purple", command  = clicked)
+btn = Button(root, text = "Plan", fg = "purple", command  = displayPlan(planBox))
 btn.place(x=280,y=0)
 
 #Find .txt file for GUI
@@ -211,17 +216,10 @@ searchFile = thisDay + "_Starlink" + "/" + filename
 
 f = open(searchFile, "r")
 
-#configure GUI plan text
-
-# def displayPlan():
-#     n = len(passes)
-#     elem = ''
-#     for i in range(n):
-#         return passes[i]
+#configure GUI plan details text
 
 satLabel = Label(root, text=f.readline())
 satLabel.place(x=1005,y=0)
-
 
 ###########################
 
