@@ -1,10 +1,9 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Thu Oct 21 13:15:39 2021
+# printPlan.py
 
-@author: iqsnider
-"""
+# Created on Thu Oct 21 13:15:39 2021
+
+# @author: iqsnider
+
 
 import datetime as dt
 import os
@@ -28,6 +27,7 @@ from datetime import datetime
 def displayPlan(planBox):
     return lambda : callback(planBox)
 
+#callback function for printing to text box
 def callback(planBox):
     ##########################
     #  Parameters
