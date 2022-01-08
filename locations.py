@@ -51,3 +51,14 @@ locations["Lemmon"] = lemmon
 #TSUFarm
 tsufarm = Topos(40.178803, -92.600666, elevation_m=297)
 locations["TSU farm"] = tsufarm
+
+# function to ask for user input
+
+def inputLocation(latEntry, lonEntry, elevationEntry):
+    
+    lat = float(latEntry.get())
+    lon = float(lonEntry.get())
+    elev = int(elevationEntry.get())
+
+    my_location = Topos(lat, lon, elevation_m=elev)
+    return my_location 

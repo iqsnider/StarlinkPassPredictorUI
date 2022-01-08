@@ -9,7 +9,7 @@ import datetime as dt
 import os
 
 from starlinkPassPredictor import *
-from locations import locations
+from locations import *
 from writeAcpPlan import *
 
 from skyfield import api
@@ -22,13 +22,12 @@ from datetime import datetime
 
 
 #functions to display user text when button is clicked
-#currently it prints "Hello" when display is called
 
-def displayPlan(planBox):
-    return lambda : callback(planBox)
+def calculatePlan(x, y, z):
+    return lambda : callback(x, y, z)
 
 #callback function for printing to text box
-def callback(planBox):
+def callback(x, y, z):
     ##########################
     #  Parameters
     ##########################
@@ -54,7 +53,11 @@ def callback(planBox):
     #start = dt.datetime(2020,5,28,0,00,00)
     #stop = dt.datetime(2020,5,28,5,00,00)
     
-    loc = locations["TSU farm"]
+    #set location
+    # loc = locations["TSU farm"]
+    
+    # input location
+    loc = inputLocation(x, y, z)
     
     #imagePath = "F:\\++__2020.5__++\\Sats\\%s_Starlink" % (start.strftime('%Y-%m-%d'))
     imagePath = "%s_Starlink" % (start.strftime('%Y-%m-%d'))
@@ -130,10 +133,65 @@ def callback(planBox):
     writeAcpPlan(obs, exposureTime, exposureRepeat, filterLetter, binning, imagePath, os.path.join(staticPath, filename), False)
 
     ###########################
-    #insert to text box
-    s = passes
-    planBox.insert(END, s)
-    planBox.see(END)    
+    ### Morning ###
+
+    print("\n\n ### MORNING ### \n\n")
+    
+    start = dt.datetime.utcnow().replace(hour=9, minute=00, second=00)
+    stop = dt.datetime.utcnow().replace(hour=15, minute=00, second=00)
+    
+    #start = dt.datetime(2020,5,28,9,00,00)
+    #stop = dt.datetime(2020,5,28,15,00,00)
+    
+    
+    #Determine when is sunset and twilight
+    t, y = almanac.find_discrete(ts.utc(start.replace(tzinfo=api.utc)), ts.utc(stop.replace(tzinfo=api.utc)), almanac.dark_twilight_day(e, loc))
+    
+    for ti, yi in zip(t,y):
+    	if yi == 3:
+    		sunset = ti
+    	if yi == 1:
+    		twilight = ti
+    
+    twilight = twilight.utc_datetime()
+    
+    print("Astronomical Twilght is " + twilight.strftime('%Y-%m-%d %H:%M:%S') )
+    
+    
+    ###########################
+    
+    
+    #Find all passes
+    passes = starlinkPassPredictor(start, twilight, loc, params, path, "allPassesMorning_" + start.strftime('%Y-%m-%d'))
+    
+    #Select some to observe
+    passes = selectStarlinkPasses(passes, timePer, path, "selectedPassesMorning_" + start.strftime('%Y-%m-%d'))
+    
+    
+    ###########################
+    
+    
+    #Make an ACP plan
+    filename = "starlinkPlanMorning.txt"
+    print("Writing ACP Plan as " + filename)
+    
+    #Reorganize for ACP plan
+    obs = []
+    for p in passes:
+    	obs.append([p["name"],p["maxTime"],offset,p["maxRA"],p["maxDec"],p["maxAlt"],p["maxAz"]])
+    
+    #Write ACP plan for Pomenis
+    writeAcpPlan(obs, exposureTime, exposureRepeat, filterLetter, binning, imagePath, os.path.join(path, filename), True)
+    writeAcpPlan(obs, exposureTime, exposureRepeat, filterLetter, binning, imagePath, os.path.join(staticPath, filename), True)
+    
+    
+    ###########################
+
+    
+    # #insert to text box
+    # temp = passes
+    # planBox.insert(END, temp)
+    # planBox.see(END)    
     
     
 

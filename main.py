@@ -31,17 +31,20 @@
 
 import datetime as dt
 import os
+import csv
 
 from starlinkPassPredictor import *
-from locations import locations
+from locations import *
 from writeAcpPlan import *
+from printPlan import *
 
 from skyfield import api
 from skyfield import almanac
  
 from tkinter import *
-from printPlan import *
+from tkinter import filedialog
 from tkinter.scrolledtext import ScrolledText
+
 from datetime import datetime
 
 
@@ -49,22 +52,29 @@ from datetime import datetime
 # Start of GUI block
 print("Starting GUI")
 
+def openFile():
+    filePath = filedialog.askopenfilename(initialdir="StarlinkPassPredictorUI-main", title="Select a file")
+    
+    # open file
+    os.system('"%s"' % filePath)
+
 # create root window
 root = Tk()
 
 
 # root window title and dimensions
 root.title("Starlink Pass Predictor")
-root.geometry('1450x500')
+
+root.geometry('400x200')
 
 # adding menu bar in root window
 # new item in menu bar labeled as 'New'
 # adding more items in menu bar
-menu = Menu(root)
-item = Menu(menu)
-item.add_command(label = 'New')
-menu.add_cascade(label = 'File', menu = item)
-root.config(menu = menu)
+# menu = Menu(root)
+# item = Menu(menu)
+# item.add_command(label = 'New')
+# menu.add_cascade(label = 'File', menu = item)
+# root.config(menu = menu)
 
 
 #end of style GUI Block
@@ -72,30 +82,52 @@ root.config(menu = menu)
 
 ###########################
 
+#Open observation plan files
+file_button = Button(root, text="Open Plan File", fg = "purple",command=openFile)
+file_button.pack()
 
 #PassPredictor plan GUI output 
 
-#plan header
-planX = Label(root, text = "Name                     ID       Rise Time             Rise Azimuth   Peak Time             Peak Alt   Peak Azimuth   Set Time              Set Azimuth   Duration")
-planX.place(x=5,y=65)
+# #plan header
+# planX = Label(root, text = "Name                     ID       Rise Time             Rise Azimuth   Peak Time             Peak Alt   Peak Azimuth   Set Time              Set Azimuth   Duration")
+# planX.place(x=5,y=65)
 
-#textbox output for copy/pasting
-planBox = ScrolledText(root, width=120, font=("lucida", 13))
-planBox.place(x=5,y=85)
+# #textbox output for copy/pasting
+# planBox = ScrolledText(root, width=120, font=("lucida", 13))
+# planBox.place(x=5,y=85)
 
+
+##############################
 
 # adding a label to the root window
-lbl = Label(root, text = "Location (e.g. \"TSU farm\")")
-lbl.place(x=5,y=0)
+locLbl = Label(root, text = "Location (Latitude, Longitude, Elevation)")
+locLbl.pack()
 
 
 # adding Entry field
-txt = Entry(root, width=10)
-txt.place(x=175,y=0)
 
+#Latitude
+latEntry = Entry(root, width=15)
+latEntry.pack()
 
-btn = Button(root, text = "Plan", fg = "purple", command=displayPlan(planBox))
-btn.place(x=280,y=0)
+#Logitude
+lonEntry = Entry(root, width=15)
+lonEntry.pack()
+
+#Elevation
+elevationEntry = Entry(root, width=15)
+elevationEntry.pack()
+
+###############################
+
+# run printPlan button
+btn = Button(root, text = "Calculate Plan", fg = "purple", command=calculatePlan(latEntry, lonEntry, elevationEntry))
+btn.pack()
+
+calcLbl = Label(root, text = "*Takes 1-2 mins*")
+calcLbl.pack()
+
+###############################
 
 # #Find .txt file for GUI
 # #yyyy-mm-dd
