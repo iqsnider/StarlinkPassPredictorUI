@@ -31,7 +31,7 @@
 
 import datetime as dt
 import os
-import csv
+import pandas as pd
 
 from starlinkPassPredictor import *
 from locations import *
@@ -42,21 +42,24 @@ from skyfield import api
 from skyfield import almanac
  
 from tkinter import *
-from tkinter import filedialog
-from tkinter.scrolledtext import ScrolledText
+from tkinter import filedialog, messagebox, ttk
 
 from datetime import datetime
 
 
 
-# Start of GUI block
-print("Starting GUI")
+# csv file display functions
 
 def openFile():
-    filePath = filedialog.askopenfilename(initialdir="StarlinkPassPredictorUI-main", title="Select a file")
+    filePath = filedialog.askopenfilename(initialdir="/StarlinkPassPredictorUI-main", title="Select a file", filetypes=(("csv files", "*.csv"),("all files","*.*")))
     
     # open file
     os.system('"%s"' % filePath)
+
+
+# Start of GUI block
+print("Starting GUI")
+
 
 # create root window
 root = Tk()
@@ -65,7 +68,7 @@ root = Tk()
 # root window title and dimensions
 root.title("Starlink Pass Predictor")
 
-root.geometry('400x200')
+root.geometry('500x700')
 
 # adding menu bar in root window
 # new item in menu bar labeled as 'New'
@@ -76,15 +79,38 @@ root.geometry('400x200')
 # menu.add_cascade(label = 'File', menu = item)
 # root.config(menu = menu)
 
+# frame for treeview
+display_frame = LabelFrame(root, text="CSV Data")
+display_frame.place(height=250,width=500)
+
+#frame for file dialog
+file_frame = LabelFrame(root, text="Open File")
+file_frame.place(height=100, width=400, rely=0.4, relx=0)
+
+#fram for plan calculation
+calc_frame = LabelFrame(root, text="Calculate Observation Plan")
+calc_frame.place(height=175, width=500, rely=0.6, relx=0)
+
 
 #end of style GUI Block
 
 
-###########################
+##############################
 
-#Open observation plan files
-file_button = Button(root, text="Open Plan File", fg = "purple",command=openFile)
-file_button.pack()
+#Browse observation plan files
+selectFileBtn = Button(file_frame, text="Select File", fg = "purple",command=openFile) #TODO fix command
+selectFileBtn.place(rely=0.65, relx=0.5)
+
+#Load observation plan files
+loadFileBtn = Button(file_frame, text="Load File", fg = "purple") #TODO command
+loadFileBtn.place(rely=0.65, relx=0.25)
+
+# label file
+label_file = ttk.Label(file_frame, text="No File Selected")
+label_file.place(rely=0, relx=0)
+
+
+##############################
 
 #PassPredictor plan GUI output 
 
@@ -99,33 +125,47 @@ file_button.pack()
 
 ##############################
 
+# treeview widget
+tv1 = ttk.Treeview(display_frame)
+tv1.place(relheight=1, relwidth=1)
+
+treescrolly = Scrollbar(display_frame, orient="vertical", command=tv1.yview)
+treescrollx = Scrollbar(display_frame, orient="horizontal", command=tv1.xview)
+
+tv1.configure(xscrollcommand=treescrollx.set, yscrollcommand=treescrolly.set)
+treescrollx.pack(side="bottom", fill="x")
+treescrolly.pack(side="right", fill="y")
+
+
+##############################
+
 # adding a label to the root window
-locLbl = Label(root, text = "Location (Latitude, Longitude, Elevation)")
-locLbl.pack()
+locLbl = Label(calc_frame, text = "Input location (Latitude, Longitude, Elevation)")
+locLbl.place(rely=0.05, relx=0.05)
 
 
 # adding Entry field
 
 #Latitude
-latEntry = Entry(root, width=15)
-latEntry.pack()
+latEntry = Entry(calc_frame, width=15)
+latEntry.place(rely=0.25, relx=0.05)
 
 #Logitude
-lonEntry = Entry(root, width=15)
-lonEntry.pack()
+lonEntry = Entry(calc_frame, width=15)
+lonEntry.place(rely=0.25, relx=0.35)
 
 #Elevation
-elevationEntry = Entry(root, width=15)
-elevationEntry.pack()
+elevationEntry = Entry(calc_frame, width=15)
+elevationEntry.place(rely=0.25, relx=0.65)
 
 ###############################
 
 # run printPlan button
-btn = Button(root, text = "Calculate Plan", fg = "purple", command=calculatePlan(latEntry, lonEntry, elevationEntry))
-btn.pack()
+btn = Button(calc_frame, text = "Calculate Plan", fg = "purple", command=calculatePlan(latEntry, lonEntry, elevationEntry))
+btn.place(rely=0.5, relx=0.05)
 
-calcLbl = Label(root, text = "*Takes 1-2 mins*")
-calcLbl.pack()
+calcLbl = Label(calc_frame, text = "*Takes 1-2 mins*")
+calcLbl.place(rely=0.7, relx=0.05)
 
 ###############################
 
