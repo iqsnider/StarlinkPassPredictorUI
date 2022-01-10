@@ -1,4 +1,5 @@
 # main.py
+# Sets up GUI and displays .csv and .txt files
 
 # This script utilizes the functions in the other files to calculate
 # ephemerides for Starlink, determine which are visible, and create
@@ -48,13 +49,6 @@ from datetime import datetime
 
 
 
-# csv file display functions
-
-def openFile():
-    filePath = filedialog.askopenfilename(initialdir="/StarlinkPassPredictorUI-main", title="Select a file", filetypes=(("csv files", "*.csv"),("all files","*.*")))
-    
-    # open file
-    os.system('"%s"' % filePath)
 
 
 # Start of GUI block
@@ -68,7 +62,7 @@ root = Tk()
 # root window title and dimensions
 root.title("Starlink Pass Predictor")
 
-root.geometry('500x700')
+root.geometry('600x700')
 
 # adding menu bar in root window
 # new item in menu bar labeled as 'New'
@@ -81,15 +75,15 @@ root.geometry('500x700')
 
 # frame for treeview
 display_frame = LabelFrame(root, text="CSV Data")
-display_frame.place(height=250,width=500)
+display_frame.place(height=250,width=600)
 
 #frame for file dialog
 file_frame = LabelFrame(root, text="Open File")
-file_frame.place(height=100, width=400, rely=0.4, relx=0)
+file_frame.place(height=100, width=500, rely=0.4, relx=0)
 
 #fram for plan calculation
 calc_frame = LabelFrame(root, text="Calculate Observation Plan")
-calc_frame.place(height=175, width=500, rely=0.6, relx=0)
+calc_frame.place(height=175, width=600, rely=0.6, relx=0)
 
 
 #end of style GUI Block
@@ -98,11 +92,11 @@ calc_frame.place(height=175, width=500, rely=0.6, relx=0)
 ##############################
 
 #Browse observation plan files
-selectFileBtn = Button(file_frame, text="Select File", fg = "purple",command=openFile) #TODO fix command
+selectFileBtn = Button(file_frame, text="Select File", fg = "purple", command=lambda: file_dialog())
 selectFileBtn.place(rely=0.65, relx=0.5)
 
 #Load observation plan files
-loadFileBtn = Button(file_frame, text="Load File", fg = "purple") #TODO command
+loadFileBtn = Button(file_frame, text="Load File", fg = "purple", command=lambda: load_data())
 loadFileBtn.place(rely=0.65, relx=0.25)
 
 # label file
@@ -135,6 +129,42 @@ treescrollx = Scrollbar(display_frame, orient="horizontal", command=tv1.xview)
 tv1.configure(xscrollcommand=treescrollx.set, yscrollcommand=treescrolly.set)
 treescrollx.pack(side="bottom", fill="x")
 treescrolly.pack(side="right", fill="y")
+
+
+# csv file display functions
+
+def file_dialog():
+    fileName = filedialog.askopenfilename(initialdir="/", title="Select a file", filetypes=(("xlsx files", "*.xlsx"),("All Files","*.*")))
+    label_file["text"] = fileName
+    return None
+
+def load_data():
+    filePath = label_file["text"]
+    try:
+        excel_fileName = r"{}".format(filePath)
+        df = pd.read_excel(excel_fileName)
+    except ValueError:
+        tk.messagebox.showerror("Information", "Invalid file")
+        return None
+    except FileNotFoundError:
+        tk.messagebox.showerror("Information", "File not found")
+        return None
+    
+    clear_data()
+    tv1["column"] = list(df.columns)
+    tv1["show"] = "headings"
+    for column in tv1["columns"]:
+        tv1.heading(column, text=column)
+        
+    df_rows = df.to_numpy().tolist()
+    for row in df_rows:
+        tv1.insert("", "end", values=row)
+    return None
+    
+
+def clear_data():
+    tv1.delete(*tv1.get_children())
+    return None
 
 
 ##############################
