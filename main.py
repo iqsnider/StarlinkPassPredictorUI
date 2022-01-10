@@ -1,5 +1,5 @@
 # main.py
-# Sets up GUI and displays .csv and .txt files
+# Sets up GUI and displays .csv files
 
 # This script utilizes the functions in the other files to calculate
 # ephemerides for Starlink, determine which are visible, and create
@@ -74,7 +74,7 @@ root.geometry('600x700')
 # root.config(menu = menu)
 
 # frame for treeview
-display_frame = LabelFrame(root, text="CSV Data")
+display_frame = LabelFrame(root, text="File Data")
 display_frame.place(height=250,width=600)
 
 #frame for file dialog
@@ -134,15 +134,15 @@ treescrolly.pack(side="right", fill="y")
 # csv file display functions
 
 def file_dialog():
-    fileName = filedialog.askopenfilename(initialdir="/", title="Select a file", filetypes=(("xlsx files", "*.xlsx"),("All Files","*.*")))
+    fileName = filedialog.askopenfilename(initialdir="/StarlinkPassPredictorUI-main", title="Select a file", filetypes=(("csv files", "*.csv"),("All Files","*.*")))
     label_file["text"] = fileName
     return None
 
 def load_data():
     filePath = label_file["text"]
     try:
-        excel_fileName = r"{}".format(filePath)
-        df = pd.read_excel(excel_fileName)
+        csv_fileName = r"{}".format(filePath)
+        df = pd.read_csv(csv_fileName)
     except ValueError:
         tk.messagebox.showerror("Information", "Invalid file")
         return None
