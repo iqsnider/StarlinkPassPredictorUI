@@ -1,6 +1,8 @@
 # StarlinkPassPredictorUI
 
-The original code below has been modified to function as a user-friendly GUI for students and amateur astronomers looking to observe Starlink satellites. The original documentation by Harry Krantz is below.
+StarlinkPassPredictorUI creates a user-friendly GUI for displaying Starlink observation plans as CSV files. This is intended for anyone interested in observing and analyzing Starlink satellites.
+
+The orbital mechanics involved in calculating Starlink observation plans was utilized in Harry Krantz' project for analyzing light pollution from the Starlink network. Documentation about his code and instructions on working the program are included below.
 
 This is a collection of python code I wrote to calculate ephemerides for satellites from TLE data. Specifically this program is arranged to determine when to observe Starlink satellites. The base functions however can be used for any satellite TLE.
 
