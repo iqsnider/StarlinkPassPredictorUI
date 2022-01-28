@@ -1,5 +1,6 @@
 # findPass.py
 #
+
 # Find all the observable passes of a satellite for a given location and time range
 #
 # Harry Krantz

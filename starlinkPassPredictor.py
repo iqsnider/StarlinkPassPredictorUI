@@ -1,4 +1,13 @@
 # starlinkPassPredictor.py
+
+
+# TODO add function for selecting exact time range (line 97 printPlan.py)
+# TODO load old TLEs
+# TODO set to specific part of the sky
+# TODO custom RA & dec
+
+
+
 #
 # Pull the latest Starlink TLEs from Celestrak and find observable passes
 #

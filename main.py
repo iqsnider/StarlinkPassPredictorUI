@@ -75,15 +75,15 @@ root.geometry('600x700')
 
 # frame for treeview
 display_frame = LabelFrame(root, text="File Data")
-display_frame.place(height=250,width=600)
+display_frame.place(height=320,width=600)
 
 #frame for file dialog
 file_frame = LabelFrame(root, text="Open File")
-file_frame.place(height=100, width=500, rely=0.4, relx=0)
+file_frame.place(height=100, width=500, rely=0.5, relx=0)
 
 #fram for plan calculation
 calc_frame = LabelFrame(root, text="Calculate Observation Plan")
-calc_frame.place(height=175, width=600, rely=0.6, relx=0)
+calc_frame.place(height=175, width=600, rely=0.7, relx=0)
 
 
 #end of style GUI Block
