@@ -105,12 +105,14 @@ def callback(x, y, z):
     
     twilight = twilight.utc_datetime()
     
-    print("Astronomical Twilght is " + twilight.strftime('%Y-%m-%d %H:%M:%S') )
+    print("Astronomical Twilght is " + twilight.strftime('%Y-%m-%d %H:%M:%S'))
     
     
     ###########################
     
-    
+    # TODO function that accepts custom start time
+    #               will then go here | *maybe* not for certain if this will work (but shall try lol)
+    #                                 V
     #Find all passes
     passes = starlinkPassPredictor(twilight, stop, loc, params, path, "allPassesEvening_" + start.strftime('%Y-%m-%d'))
     

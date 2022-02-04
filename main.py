@@ -62,7 +62,7 @@ root = Tk()
 # root window title and dimensions
 root.title("Starlink Pass Predictor")
 
-root.geometry('600x700')
+root.geometry('600x900')
 
 # adding menu bar in root window
 # new item in menu bar labeled as 'New'
@@ -75,15 +75,20 @@ root.geometry('600x700')
 
 # frame for treeview
 display_frame = LabelFrame(root, text="File Data")
-display_frame.place(height=320,width=600)
+display_frame.place(height=320,width=900)
 
 #frame for file dialog
 file_frame = LabelFrame(root, text="Open File")
-file_frame.place(height=100, width=500, rely=0.5, relx=0)
+file_frame.place(height=100, width=500, rely=0.4, relx=0)
 
-#fram for plan calculation
+
+#frame for plan calculation
 calc_frame = LabelFrame(root, text="Calculate Observation Plan")
-calc_frame.place(height=175, width=600, rely=0.7, relx=0)
+calc_frame.place(height=400, width=600, rely=0.55, relx=0)
+
+#frame inside calc_frame for setting a specific time
+setTime_frame = LabelFrame(calc_frame, text="Specific Start Time")
+setTime_frame.place(height=100, width=500, rely=0.5, relx=0.05)
 
 
 #end of style GUI Block
@@ -178,24 +183,28 @@ locLbl.place(rely=0.05, relx=0.05)
 
 #Latitude
 latEntry = Entry(calc_frame, width=15)
-latEntry.place(rely=0.25, relx=0.05)
+latEntry.place(rely=0.15, relx=0.05)
 
 #Logitude
 lonEntry = Entry(calc_frame, width=15)
-lonEntry.place(rely=0.25, relx=0.35)
+lonEntry.place(rely=0.15, relx=0.35)
 
 #Elevation
 elevationEntry = Entry(calc_frame, width=15)
-elevationEntry.place(rely=0.25, relx=0.65)
+elevationEntry.place(rely=0.15, relx=0.65)
+
+#Specific time
+startTimeEntry = Entry(setTime_frame, width=15)
+startTimeEntry.place(rely=0.25, relx=0.05)
 
 ###############################
 
 # run printPlan button
 btn = Button(calc_frame, text = "Calculate Plan", fg = "purple", command=calculatePlan(latEntry, lonEntry, elevationEntry))
-btn.place(rely=0.5, relx=0.05)
+btn.place(rely=0.3, relx=0.05)
 
 calcLbl = Label(calc_frame, text = "*Takes 1-2 mins*")
-calcLbl.place(rely=0.7, relx=0.05)
+calcLbl.place(rely=0.4, relx=0.05)
 
 ###############################
 
